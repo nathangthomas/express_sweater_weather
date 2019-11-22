@@ -18,9 +18,14 @@ router.get('/', (req, res) => {
             forecastFor(cities)
               .then(forecasts => {
                 res.status(200).send(forecasts)
+                .catch(e)
               })
           })
-        }
+        }else {
+        res.status(401).json({
+          error: 'Unauthorized'
+        });
+      }
     })
 });
 
@@ -33,26 +38,33 @@ router.post('/', (req, res) => {
         addFavorite(cityState, user)
          .then(favorite => {
            res.status(201).send(`"message": "${cityState} has been added to your favorites"`)
+           .cache(e)
           })
-        }
+        }else {
+          res.status(401).json({
+            error: 'Unauthorized'
+        });
+      }
     })
 });
 
 router.delete('/', (req, res) => {
   let apiKey = req.body.api_key
   let cityState = req.body.location
-  console.log(apiKey)
-  console.log(cityState)
   findUser(apiKey)
     .then(user => {
-      let userId = user[0].id
-      console.log(userId)
       if (user.length) {
-        seekAndDestoryLocation(cityState, userId)
-          .then(destroyed => {
-            console.log(destroyed)
-            res.status(204).send()
-        })
+      let userId = user[0].id
+      seekAndDestoryLocation(cityState, userId)
+        .then(destroyed => {
+          res.status(204).send()
+// having trouble getting status: 204 to render on page here
+          .catch(e)
+          })
+        }else {
+          res.status(401).json({
+            error: 'Unauthorized'
+        });
       }
     })
 });
