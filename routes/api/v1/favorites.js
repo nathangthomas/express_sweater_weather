@@ -2,8 +2,8 @@ require('dotenv').config()
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('../../../knexfile')[environment];
 const database = require('knex')(configuration);
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const fetch = require('node-fetch')
 
 router.get('/', (req, res) => {
@@ -24,6 +24,20 @@ router.get('/', (req, res) => {
     })
 });
 
+router.post('/', (req, res) => {
+  let cityState = req.body.location
+  findUser(req.body.api_key)
+    .then(user => {
+      if (user.length) {
+        addFavorite(cityState, user)
+         .then(favorite => {
+           console.log(favorite)
+           res.status(201).send(`"message": "${cityState} has been added to your favorites"`)
+          })
+        }
+    })
+});
+
 async function findUser(apiKey) {
   try {
     return await database('users').where({apiKey: apiKey});
@@ -36,6 +50,15 @@ async function favoriteCities(user) {
   let userId = user[0].id
   try{
     return await database('favorites').where({user_id: userId})
+  }catch(e){
+    return e;
+  }
+}
+
+async function addFavorite(cityState, user){
+  let userId = user[0].id
+  try{
+    return await database('favorites').insert({location: cityState, user_id: userId})
   }catch(e){
     return e;
   }
