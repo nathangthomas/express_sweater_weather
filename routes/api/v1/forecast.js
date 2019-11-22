@@ -1,18 +1,39 @@
 require('dotenv').config()
-var express = require('express');
-var router = express.Router();
+const environment = process.env.NODE_ENV || 'development';
+const configuration = require('../../../knexfile')[environment];
+const database = require('knex')(configuration);
+const express = require('express');
+const router = express.Router();
 const fetch = require('node-fetch')
 
 //example ...  /api/v1/forecast?location=denver,co
 router.get( '/', (req, res) => {
-  getCoordinates(req.query.location)
-    .then(coordinates => {
-      getForecast(coordinates)
-        .then(forecast => {
+  findUser(req.body.api_key)
+    .then(user => {
+      if (user.length){
+        getCoordinates(req.query.location)
+        .then(coordinates => {
+        getForecast(coordinates)
+          .then(forecast => {
           res.status(200).send(forecast)
+          .catch(e)
         })
-    })
+      })
+    }else {
+        res.status(401).json({
+          error: 'Unauthorized'
+        });
+      }
+  })
 });
+
+async function findUser(apiKey) {
+  try {
+    return await database('users').where({apiKey: apiKey});
+  } catch(e){
+      return e;
+  }
+}
 
 async function getForecast(coordinates) {
   try{
