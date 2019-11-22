@@ -9,7 +9,7 @@ exports.seed = function(knex) {
 
         // Insert a single user, return the user ID, insert 2 favorites
         knex('users').insert({
-          email: 'example@email.com', password: 'password', api_key: 'sample_api_key', id: 1
+          email: 'example@email.com', password: 'password', apiKey: 'sample_api_key', id: 1
         })
         .then(user => {
           return knex('favorites').insert([
