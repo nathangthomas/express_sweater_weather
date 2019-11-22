@@ -1,74 +1,54 @@
-# All your Express base are belong to us
+# Express Sweater Weather
 
-[![Build Status](https://travis-ci.com/turingschool-examples/all-your-base.svg?branch=master)](https://travis-ci.com/turingschool-examples/all-your-base)
+## Welcome!
 
-## Getting started
-To use this repo, you’ll need to `fork` the repo as your own. Once you have done that, you’ll need to run the following command below to get everything up and running. 
+Express Sweater Weather is a Turing School of Software and Design solo project completed over 3 day sprint. It was designed as a first introduction to Express and Node.js.
 
-#### Installing necessary dependencies
-The easiest way to get started is to run the following command. This will pull down any necessary dependencies that your app will require. You can think of this command as something incredibly similar to `bundle install` in Rails. 
+### Build Using
+- JavaScript
+- Express
+- Node.js
+- Knex
 
-`npm install`
+## Checkout the Repo and the Live App hosted on Heroku!
 
-#### Set up your local database
-You’ll need to figure out a name for your database. We suggest calling it something like `sweater_weather_dev`.  
+GitHub Repo: (https://github.com/nathangthomas/express_sweater_weather)
+Live App: (https://winter-weather-express.herokuapp.com/)
 
-To get things set up, you’ll need to access your Postgres instance by typing in `psql` into your terminal. Once there, you can create your database by running the comment `CREATE DATABASE PUT_DATABASE_NAME_HERE_dev;`. 
+## Run Express Sweater Weather on your local machine!
 
-Now you have a database for your new project.
+1. `git clone https://github.com/nathangthomas/express_sweater_weather.git`
+2. Run `npm install`
+3. Add a `.env` file in your root directory. Don't forget to include this file in your .gitignore.
+4. Add the following API keys to the `.env` file:
+  - `GOOGLE_API_KEY=<your google api key here>`
+  - `DARKSKY_API_KEY=<your darksky api key here>`
+5. Run `psql` to get started setting up your database.
+    `CREATE DATABASE <database_name>_dev;`
+    `CREATE DATABASE <database_name>_test;`
+    type \q to escape
+6. Run `migrate:latest` and `knex seed:run` to migrate and seed your database
+7. Spin up the server by running `npm start`
+8. The following are the endpoints available:
+  - `GET /api/v1/forecast?location=denver,co` (forecast for a city)
+  - `POST /api/v1/favorites` (favoriting locations)
+  - `GET /api/v1/favorites` (listing favorite locations)
+  - `DELETE /api/v1/favorites` (removing favorite locations)
 
-#### Migrations
-Once you have your database setup, you’ll need to run some migrations (if you have any). You can do this by running the following command: 
-
-`knex migrate:latest`
-
-
-Instructions to create database, run migrations, and seed: 
+(all endpoints must be accompanied by an API Key assigned to your user in the database. This API key and all additional parameters must be passed in through the request body like the example below.)
 ```
-psql
-CREATE DATABASE DATABASE_NAME_dev;
-\q
+POST /api/v1/favorites
+Content-Type: application/json
+Accept: application/json
 
-knex migrate:latest
-knex seed:run
+body:
+
+{
+  "location": "Denver, CO",
+  "api_key": "jgn983hy48thw9begh98h4539h4"
+}
 ```
+9. Choose to use either the [local server](http://localhost:3000) or [live Heroku app](https://winter-weather-express.herokuapp.com/) in combination with [Postman](https://www.getpostman.com/).
 
-#### Set up your test database
-Most of the setup is going to be same as the one you did before. You’ll notice one small difference with setting the environment flag to `test`.  
-
-```
-psql
-CREATE DATABASE DATABASE_NAME_test;
-\q
-
-knex migrate:latest --env test
-```
-
-## Running your tests
-Running tests are simple and require you to run the following command below: 
-
-`npm test`
-
-When the tests have completed, you’ll get a read out of how things panned out. The tests will be a bit more noisy than what you’re used to, so be prepared. 
-
-## Setting up your production environment
-This repo comes with a lot of things prepared for you. This includes production ready configuration. To get started, you’ll need to do a few things. 
-
-- Start a brand new app on the Heroku dashboard 
-- Add a Postgres instance to your new Heroku app
-- Find the URL of that same Postgres instance and copy it. It should look like a long url. It may look something like like `postgres://sdflkjsdflksdf:9d3367042c8739f3...`.
-- Update your `knexfile.js` file to use your Heroku database instance. You’ll see a key of `connection` with a value of an empty string. This is where you’ll paste your new Postgres instance URL. 
-
-Once you’ve set all of that up, you’ll need to `add the remote` to your new app. This should work no differently than how you’ve done it with any Rails project. Adding this remote will allow you to run `git push heroku master`. 
-
-Once you’ve done that, you’ll need to `bash` into your Heroku instance and get some things set up. 
-
-- Run the following commands to get started:
-```
-heroku run bash
-npm install
-nom install -g knex
-knex migrate:latest
-```
-
-This will install any dependencies, install Knex, and migrate any changes that you’ve made to the database. 
+## Schema
+<img width="504" alt="Screen Shot 2019-11-22 at 4 57 57 AM" src="https://user-images.githubusercontent.com/47466067/69424038-d42cbd00-0ce4-11ea-9aa3-ad1d3f4427ea.png">
