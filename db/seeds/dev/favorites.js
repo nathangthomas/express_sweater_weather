@@ -9,12 +9,14 @@ exports.seed = function(knex) {
 
         // Insert a single user, return the user ID, insert 2 favorites
         knex('users').insert({
-          email: 'random@mail.com', password: 'password'
-        }, 'id')
+          email: 'example@email.com', password: 'password', id: 1
+        })
         .then(user => {
           return knex('favorites').insert([
-            { location: 'moab,ut'},
-            { note: 'boulder,co'}
+            { location: 'moab,ut', user_id: 1},
+            { location: 'boulder,co', user_id: 1}
+
+
           ])
         })
         .then(() => console.log('Seeding complete!'))
