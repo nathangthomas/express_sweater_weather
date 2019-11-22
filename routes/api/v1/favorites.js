@@ -127,9 +127,10 @@ async function getForecast(coordinates) {
 const forecastFor = (cities) => {
   const promises = cities.map(async (city) => {
     let coordinates = await getCoordinates(city.location)
+    let forecast = await getForecast(coordinates)
       return {
           location: `${city.location}`,
-          current_weather: await getForecast(coordinates)
+          current_weather: forecast.currently
       }
   });
   return Promise.all(promises);
