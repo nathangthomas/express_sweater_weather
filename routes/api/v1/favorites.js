@@ -25,16 +25,35 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
+  let apiKey = req.body.api_key
   let cityState = req.body.location
-  findUser(req.body.api_key)
+  findUser(apiKey)
     .then(user => {
       if (user.length) {
         addFavorite(cityState, user)
          .then(favorite => {
-           console.log(favorite)
            res.status(201).send(`"message": "${cityState} has been added to your favorites"`)
           })
         }
+    })
+});
+
+router.delete('/', (req, res) => {
+  let apiKey = req.body.api_key
+  let cityState = req.body.location
+  console.log(apiKey)
+  console.log(cityState)
+  findUser(apiKey)
+    .then(user => {
+      let userId = user[0].id
+      console.log(userId)
+      if (user.length) {
+        seekAndDestoryLocation(cityState, userId)
+          .then(destroyed => {
+            console.log(destroyed)
+            res.status(204).send()
+        })
+      }
     })
 });
 
@@ -43,6 +62,14 @@ async function findUser(apiKey) {
     return await database('users').where({apiKey: apiKey});
   } catch(e){
       return e;
+  }
+}
+
+async function seekAndDestoryLocation(cityState, userId){
+  try {
+    return await database('favorites').where({location: cityState}).where({user_id: userId}).del()
+  }catch(e){
+    return e;
   }
 }
 
