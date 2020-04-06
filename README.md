@@ -2,7 +2,7 @@
 
 ## Welcome!
 
-Express Sweater Weather is a Turing School of Software and Design solo project completed over 3 day sprint. It was designed as a first introduction to Express and Node.js.
+Express Sweater Weather is a Express/Node.js API. This was a Turing School of Software and Design solo project completed over a 3 day sprint. It was designed as a first introduction to Express and Node.js.
 
 ### Build Using
 - JavaScript
